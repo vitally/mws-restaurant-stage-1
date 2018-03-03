@@ -1,15 +1,55 @@
 @charset "utf-8";
 /* CSS Document */
 
-#map-container, .main-content {
+body {
+  font-family: Roboto;
+  font-size: 16px;
+  line-height: 1.2em;
+}
+
+footer {
+  margin: 1.5em 0 0 0;
+}
+
+#map-container,
+.main-content {
   height: 100%;
   width: 100%;
   margin: 0px;
 }
 
-.main-content{
+.main-content {
   display: flex;
   flex-wrap: wrap;
+}
+
+.container,
+.restaurants-list,
+.restaurant-card,
+.restaurant-img {
+  width: 100%;
+}
+
+.restaurants-list {
+  padding: 0;
+  margin: 0;
+}
+
+.restaurant-card {
+  margin: 1.5em 0 0 0;
+  list-style-type: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  min-height: 56px;
+  transition: min-height 0.3s;
+}
+.restaurant-card-details{
+  background-color: orange;
+  border: 1px solid #eee;
+  color: #fff;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 #map-container {
@@ -27,19 +67,28 @@
   left: 0;
 }
 
-.tap-target{
+.tap-target {
   padding: 1.5em;
 }
-@media screen and (min-width: 500px) {
- 
+
+.review-comments {
+  width: 90%;
+  margin: 0;
+  padding: 0 1em 0 1em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
-@media screen and (min-width: 750px) {
- 
-}
+@media screen and (min-width: 500px) {}
+
+@media screen and (min-width: 750px) {}
 
 @media screen and (min-width: 850px) {
-  .main-content {
+  .main-content,
+  header,
+  footer {
     width: 850px;
     margin-left: auto;
     margin-right: auto;

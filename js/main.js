@@ -178,7 +178,7 @@ createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
-  more.className = 'tap-target';
+  more.className = 'tap-target restaurant-card-details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more)
 
