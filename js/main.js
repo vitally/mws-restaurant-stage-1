@@ -137,11 +137,32 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  li.className = "restaurant-card";
+
+  const picture = document.createElement('picture');
+  picture.className = 'restaurant-picture';
+
+  const srcSmall = document.createElement('source');
+  srcSmall.className = 'source-small';
+  let picUrlSmall = DBHelper.imageUrlForRestaurant(restaurant).replace(".", "-small.");
+  let picUrlMedium = picUrlSmall.replace("small","medium");
+  srcSmall.srcset = picUrlSmall + " 1x, " + picUrlMedium + " 2x";
+  srcSmall.media = '(min-width: 500px)';
+  picture.append(srcSmall);
+
+  const srcLarge = document.createElement('source');
+  srcLarge.className = 'source-large';
+  let picUrlLarge = picUrlSmall.replace("small","large");
+  srcLarge.srcset = picUrlMedium + " 1x, " + picUrlLarge + " 2x";
+  srcLarge.media = '(min-width: 750px)';
+  picture.append(srcLarge);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
+  image.src = picUrlSmall;
+  picture.append(image);
+  
+  li.append(picture);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
@@ -157,6 +178,7 @@ createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
+  more.className = 'tap-target';
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more)
 
