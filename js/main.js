@@ -159,6 +159,7 @@ createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
+  image.alt = 'Image of "' + restaurant.name + '" reastaurant.'; 
   image.src = picUrlSmall;
   picture.appendChild(image);
 
@@ -188,6 +189,8 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.className = 'tap-target restaurant-card-details';
+  more.setAttribute('aria-label', restaurant.name + ': view details.');
+  more.setAttribute('role','button');
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.appendChild(more)
 

@@ -60,6 +60,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.className = 'restaurant-img'
   let picUrlSmall = DBHelper.imageUrlForRestaurant(restaurant).replace(".", "-small.");
   image.src = picUrlSmall;
+  image.alt = 'Image of "' + restaurant.name + '" restaurant.';
   
   const srcSmall = document.getElementById('source-small');
   let picUrlMedium = picUrlSmall.replace("small","medium");
