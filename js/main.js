@@ -35,7 +35,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
     const option = document.createElement('option');
     option.innerHTML = neighborhood;
     option.value = neighborhood;
-    select.append(option);
+    select.appendChild(option);
   });
 }
 
@@ -63,7 +63,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
     const option = document.createElement('option');
     option.innerHTML = cuisine;
     option.value = cuisine;
-    select.append(option);
+    select.appendChild(option);
   });
 }
 
@@ -127,7 +127,7 @@ resetRestaurants = (restaurants) => {
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
-    ul.append(createRestaurantHTML(restaurant));
+    ul.appendChild(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
 }
@@ -145,42 +145,51 @@ createRestaurantHTML = (restaurant) => {
   const srcSmall = document.createElement('source');
   srcSmall.className = 'source-small';
   let picUrlSmall = DBHelper.imageUrlForRestaurant(restaurant).replace(".", "-small.");
-  let picUrlMedium = picUrlSmall.replace("small","medium");
+  let picUrlMedium = picUrlSmall.replace("small", "medium");
   srcSmall.srcset = picUrlSmall + " 1x, " + picUrlMedium + " 2x";
   srcSmall.media = '(min-width: 500px)';
-  picture.append(srcSmall);
+  picture.appendChild(srcSmall);
 
   const srcLarge = document.createElement('source');
   srcLarge.className = 'source-large';
-  let picUrlLarge = picUrlSmall.replace("small","large");
+  let picUrlLarge = picUrlSmall.replace("small", "large");
   srcLarge.srcset = picUrlMedium + " 1x, " + picUrlLarge + " 2x";
   srcLarge.media = '(min-width: 750px)';
-  picture.append(srcLarge);
+  picture.appendChild(srcLarge);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = picUrlSmall;
-  picture.append(image);
-  
-  li.append(picture);
+  picture.appendChild(image);
+
+  const infoContainer = document.createElement('div');
+  infoContainer.className = 'restaurant-info-container';
+  infoContainer.appendChild(picture);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
-  li.append(name);
+  infoContainer.appendChild(name);
+
+  const addressContainer = document.createElement('div');
+  addressContainer.className = 'address-container';
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  addressContainer.appendChild(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
-  li.append(address);
+  addressContainer.appendChild(address);
+
+  infoContainer.appendChild(addressContainer);
+
+  li.appendChild(infoContainer);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.className = 'tap-target restaurant-card-details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  li.appendChild(more)
 
   return li
 }
