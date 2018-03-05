@@ -166,7 +166,7 @@ createRestaurantHTML = (restaurant) => {
   infoContainer.className = 'restaurant-info-container';
   infoContainer.appendChild(picture);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   infoContainer.appendChild(name);
 

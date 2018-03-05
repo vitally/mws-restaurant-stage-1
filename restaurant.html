@@ -27,15 +27,21 @@
 
   <main id="maincontent" class="main-content">
     <section id="restaurant-container" class="restaurant-details container">
-      <h1 id="restaurant-name" class=""></h1>
-      <picture id="restaurant-picture">
-        <source id="source-small" media="(min-width: 500px)">
-        <source id="source-large" media="(min-width: 750px)">
-        <img id="restaurant-img">
-      </picture>
-      <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
+      <div class="restaurant-info-container">
+        <h2 id="restaurant-name" class=""></h2>
+        <picture id="restaurant-picture">
+          <source id="source-small" media="(min-width: 500px)">
+          <source id="source-large" media="(min-width: 750px)">
+          <img id="restaurant-img">
+        </picture>
+        <div class="address-container">
+          <p id="restaurant-cuisine"></p>
+          <p id="restaurant-address"></p>
+        </div>
+      </div>
+      <table id="restaurant-hours" class="restaurant-hours">
+          <caption>Working Hours</caption>
+      </table>
     </section>
     <section id="map-container" class="map-container map-details container">
       <div id="map"></div>
