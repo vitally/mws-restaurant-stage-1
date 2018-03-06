@@ -19,20 +19,24 @@
   </header>
 
   <main id="maincontent" class="main-content">
-    <section id="map-container" class="map-container container" aria-label="Map.">
+    <div id="map-label" role="tooltip" hidden>Restaurant map.</div>
+    <section id="map-container" class="map-container container" aria-describedby="map-label">
       <div id="map"></div>
     </section>
     <section class="container" aria-label="Restaurant filtering and list.">
-      <div class="filter-options">
+      <div class="filter-options" role="form" aria-label="Filter Results">
         <h2>Filter Results</h2>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" class="neighborhoods-select" aria-label="Select restaurant neighborhood.">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" class="cuisines-select" aria-label="Select restaurant cusine.">
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" class="cuisines-select" aria-label="Select restaurant cuisine.">
           <option value="all">All Cuisines</option>
         </select>
+        <div id="restaurant-help" role="tooltip" hidden>Filtered restaurant list.</div>
+        <div role="tooltip" id="restaurant-neighborhood-label" hidden>Restaurant neighborhood.</div>
+        <div role="tooltip" id="restaurant-address-label" hidden>Restaurant address.</div>
+        <ul id="restaurants-list" class="restaurants-list" aria-describedby="restaurant-help"></ul>
       </div>
-      <ul id="restaurants-list" class="restaurants-list"></ul>
     </section>
   </main>
   

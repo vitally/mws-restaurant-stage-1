@@ -4,6 +4,16 @@ let restaurants,
 var map
 var markers = []
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('js/sw.js').then(() =>{
+      console.log('Service Worker Registerd');
+    }).catch(() =>{
+      this.console.error('Service Worker registration failed');
+    });
+  });
+}
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -159,7 +169,7 @@ createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.alt = 'Image of "' + restaurant.name + '" reastaurant.'; 
+  image.alt = 'Image of "' + restaurant.name + '" restaurant.'; 
   image.src = picUrlSmall;
   picture.appendChild(image);
 
@@ -175,11 +185,13 @@ createRestaurantHTML = (restaurant) => {
   addressContainer.className = 'address-container';
 
   const neighborhood = document.createElement('p');
+  neighborhood.setAttribute('aria-describedby','restaurant-neighborhood-label'); 
   neighborhood.innerHTML = restaurant.neighborhood;
   addressContainer.appendChild(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.setAttribute('aria-describedby','restaurant-address-label'); 
   addressContainer.appendChild(address);
 
   infoContainer.appendChild(addressContainer);
@@ -189,7 +201,7 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.className = 'tap-target restaurant-card-details';
-  more.setAttribute('aria-label', restaurant.name + ': view details.');
+  more.setAttribute('aria-label','Restaurant: ' + restaurant.name + ': view details.');
   more.setAttribute('role','button');
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.appendChild(more)

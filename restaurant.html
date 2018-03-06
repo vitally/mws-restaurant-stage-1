@@ -35,15 +35,18 @@
           <img id="restaurant-img">
         </picture>
         <div class="address-container">
-          <p id="restaurant-cuisine"></p>
-          <p id="restaurant-address"></p>
+          <div role="tooltip" id="restaurant-cuisine-label" hidden>Restaurant cuisine.</div>
+          <div role="tooltip" id="restaurant-address-label" hidden>Restaurant address.</div>
+          <p id="restaurant-cuisine" aria-describedby="restaurant-cuisine-label"></p>
+          <p id="restaurant-address" aria-describedby="restaurant-address-label"></p>
         </div>
       </div>
       <table id="restaurant-hours" class="restaurant-hours">
           <caption>Working Hours</caption>
       </table>
     </section>
-    <section id="map-container" class="map-container map-details container">
+    <div id="map-label" role="tooltip" hidden>Restaurant map.</div>
+    <section id="map-container" class="map-container map-details container" aria-labelledby="map-label">
       <div id="map"></div>
     </section>
     <section id="reviews-container" class="reviews-details container">
