@@ -265,7 +265,7 @@ a.restaurant-card-details:focus {
 .reviews-details {
   padding: 0 1em;
 }
-.reviews-details h2 {
+.reviews-details h3 {
   color: #f58500;
   font-size: 1.5em;
   font-weight: 300;

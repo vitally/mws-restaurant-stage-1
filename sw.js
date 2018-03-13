@@ -36,7 +36,8 @@ self.addEventListener('install', event => {
         'restaurant.html',
         '/js/main.js',
         '/js/restaurant_info.js',
-        '/css/styles.css'
+        '/css/styles.css',
+        '/js/swhelper.js'
       ]);
     }).catch(e => {
       console.log(e);
