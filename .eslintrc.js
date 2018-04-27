@@ -14,7 +14,7 @@ module.exports = {
             "tab"
         ],
         "linebreak-style": [
-            "error",
+            "warn",
             "windows"
         ],
         "quotes": [
