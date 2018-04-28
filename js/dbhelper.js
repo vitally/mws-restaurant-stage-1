@@ -34,33 +34,65 @@ class DBHelper {
 			})
 			.then(data => {
 				//Got the data, now writting it in the database.
-				const DBOpenRequest = DBHelper.database;
-				
-				if (DBOpenRequest){
-
-					DBOpenRequest.onupgradeneeded = function(){
-						const db = DBOpenRequest.result;
-						const store = db.createObjectStore('rreviews', {
-							keyPath: 'id'
-						});
-						store.createIndex('name', 'name');
-					};
-
-					DBOpenRequest.onsuccess = function(event){
-						const db = DBOpenRequest.result;
-						const tx = db.transaction('rreviews', 'readwrite');
-						const store = tx.objectStore('rreviews');
-						data.forEach((restaurant) => {
-							store.put(restaurant);
-						});
-					};
-				}
-
+				DBHelper.storeRestaurantDataInIndexedDB(data);
 				callback(null, data);
 			})
 			.catch(error => {
-				callback(error, null);
+				DBHelper.getRestaurantDataFromIndexedDB().then(data => {
+					callback(null, data);
+				});
 			});
+	}
+
+	static storeRestaurantDataInIndexedDB(data) {
+		//Got the data, now writting it in the database.
+		const DBOpenRequest = DBHelper.database;
+		DBHelper.upgadeIndexedDB(DBOpenRequest);
+		if (DBOpenRequest) {
+			DBOpenRequest.onsuccess = function (event) {
+				const db = DBOpenRequest.result;
+				const tx = db.transaction('rreviews', 'readwrite');
+				const store = tx.objectStore('rreviews');
+				data.forEach((restaurant) => {
+					store.put(restaurant);
+				});
+			};
+		}
+	}
+
+	static getRestaurantDataFromIndexedDB() {
+		//It seems like we've got an error while trying to read from the server
+		//So trying to get data from the indexedDB now
+		return new Promise((resolve, reject) => {
+			const DBOpenRequest = DBHelper.database;
+			DBHelper.upgadeIndexedDB(DBOpenRequest);
+			if (DBOpenRequest) {
+				DBOpenRequest.onsuccess = function (event) {
+					const db = DBOpenRequest.result;
+					const store = db.transaction('rreviews', 'readonly').objectStore('rreviews');
+					const data = [];
+					store.openCursor().onsuccess = function (event) {
+						const cursor = event.target.result;
+						if(cursor) {
+							data.push(cursor.value);
+							cursor.continue();
+						}else{
+							resolve(data);
+						}
+					};
+				};
+			}
+		});
+	}
+
+	static upgadeIndexedDB(DBOpenRequest) {
+		DBOpenRequest.onupgradeneeded = function () {
+			const db = DBOpenRequest.result;
+			const store = db.createObjectStore('rreviews', {
+				keyPath: 'id'
+			});
+			store.createIndex('name', 'name');
+		};
 	}
 
 	/**
