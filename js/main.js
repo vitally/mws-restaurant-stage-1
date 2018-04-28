@@ -3,6 +3,28 @@
 /*eslint no-undef: 0*/
 let map;
 
+//Adding indexed DB
+/*const indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+const DBOpenRequest = indexedDB.open('rreviews', 1);
+
+DBOpenRequest.onupgradeneeded = function(){
+	const db = DBOpenRequest.result;
+	const store = db.createObjectStore('rreviews', {
+		keyPath: 'id'
+	});
+	store.createIndex('name', 'name');
+};
+
+DBOpenRequest.onsuccess = function(){
+	const db = DBOpenRequest.result;
+	const kek = db.objectStoreNames;
+	const tx = db.transaction('rreviews', 'readwrite');
+	const store = tx.objectStore('rreviews');
+	data.forEach(function (restaurant) {
+		store.put(restaurant);
+	});
+};*/
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -10,6 +32,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	fetchNeighborhoods();
 	fetchCuisines();
 });
+
 
 /**
  * Fetch all neighborhoods and set their HTML.
