@@ -61,7 +61,8 @@ function fillRestaurantHTML(restaurant = self.restaurant){
 	const image = document.getElementById('restaurant-img');
 	image.className = 'restaurant-img';
 	let picUrlSmall = DBHelper.imageUrlForRestaurant(restaurant).concat('-small.jpg');
-	image.src = picUrlSmall;
+	//image.src = picUrlSmall;
+	image.setAttribute('data-src', picUrlSmall);
 	image.alt = 'Image of "' + restaurant.name + '" restaurant.';
   
 	const srcSmall = document.getElementById('source-small');

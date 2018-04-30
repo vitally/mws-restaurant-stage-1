@@ -1,8 +1,6 @@
 /*eslint no-console: 0*/
 /*eslint no-unused-vars: 0*/
 /*eslint no-undef: 0*/
-let map;
-
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -10,6 +8,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	fetchNeighborhoods();
 	fetchCuisines();
 });
+
+let map;
+
+const observer = new IntersectionObserver(onIntersection, {
+	rootMargin: '0px',
+	threshold: 0.1
+});
+
+function onIntersection(entries) {
+	// Loop through the entries
+	entries.forEach(entry => {
+		// Are we in viewport?
+		if (entry.intersectionRatio > 0) {
+
+			// Stop watching and load the image
+			observer.unobserve(entry.target);
+			loadImage(entry.target);
+		}
+	});
+}
+
+function loadImage(image) {
+	const src = image.dataset.src;
+	fetchImage(src).then(() => {
+		image.src = src;
+	});
+}
+
+function fetchImage(url) {
+	return new Promise((resolve, reject) => {
+		const image = new Image();
+		image.src = url;
+		image.onload = resolve;
+		image.onerror = reject;
+	});
+}
+
 
 
 /**
@@ -31,7 +66,7 @@ function fetchNeighborhoods() {
  */
 function fillNeighborhoodsHTML(neighborhoods = this.neighborhoods) {
 	const select = document.getElementById('neighborhoods-select');
-	if(select){
+	if (select) {
 		neighborhoods.forEach(neighborhood => {
 			const option = document.createElement('option');
 			option.innerHTML = neighborhood;
@@ -60,7 +95,7 @@ function fetchCuisines() {
  */
 function fillCuisinesHTML(cuisines = this.cuisines) {
 	const select = document.getElementById('cuisines-select');
-	if(select){
+	if (select) {
 		cuisines.forEach(cuisine => {
 			const option = document.createElement('option');
 			option.innerHTML = cuisine;
@@ -119,11 +154,18 @@ function resetRestaurants(restaurants) {
 	ul.innerHTML = '';
 
 	// Remove all map markers
-	if(this.markers){
+	if (this.markers) {
 		this.markers.forEach(m => m.setMap(null));
 	}
 	this.markers = [];
 	this.restaurants = restaurants;
+}
+
+function startObserver() {
+	const images = document.querySelectorAll('.restaurant-img');
+	images.forEach(image => {
+		observer.observe(image);
+	});
 }
 
 /**
@@ -134,6 +176,7 @@ function fillRestaurantsHTML(restaurants = this.restaurants) {
 	restaurants.forEach(restaurant => {
 		ul.appendChild(createRestaurantHTML(restaurant));
 	});
+	startObserver();
 	addMarkersToMap();
 }
 
@@ -168,7 +211,8 @@ function createRestaurantHTML(restaurant) {
 	const image = document.createElement('img');
 	image.className = 'restaurant-img';
 	image.alt = 'Image of "' + restaurant.name + '" restaurant.';
-	image.src = picUrlSmall;
+	//image.src = picUrlSmall;
+	image.setAttribute('data-src', picUrlSmall);
 	picture.appendChild(image);
 
 	const infoContainer = document.createElement('div');
