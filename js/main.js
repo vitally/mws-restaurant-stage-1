@@ -219,10 +219,22 @@ function createRestaurantHTML(restaurant) {
 	infoContainer.className = 'restaurant-info-container';
 	infoContainer.appendChild(picture);
 
+	
 	const name = document.createElement('h2');
 	name.innerHTML = restaurant.name;
 	infoContainer.appendChild(name);
+	
+	const favorite_icon = document.createElement('a');
+	const fav_icon_aria_label = restaurant.is_favorite ? 'Remove restaurant ' + restaurant.name + 'from favorites.' : 'Add restaurant ' + restaurant.name + 'to favorites.';
+	favorite_icon.className = 'tap-target top-right';
+	favorite_icon.setAttribute('aria-label', fav_icon_aria_label);
+	infoContainer.appendChild(favorite_icon);
 
+	const favorite_symbol = document.createElement('i');
+	favorite_symbol.className = 'material-icons favorite-icon';
+	favorite_symbol.innerHTML = restaurant.is_favorite ? 'favorite' :'favorite_border';
+	favorite_icon.appendChild(favorite_symbol);
+	
 	const addressContainer = document.createElement('div');
 	addressContainer.className = 'address-container';
 
