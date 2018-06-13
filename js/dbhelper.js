@@ -12,8 +12,19 @@ class DBHelper {
 	 */
 	static get DATABASE_URL() {
 		const port = 1337; // Change this to your server port
-		return `http://localhost:${port}/restaurants`;
+		return `http://localhost:${port}/`;
 	}
+
+	static get RESTAURANT_URL() {
+		const port = 1337; // Change this to your server port
+		return `${this.DATABASE_URL}restaurants/`;
+	}
+
+	static get REVIEW_URL() {
+		const port = 1337; // Change this to your server port
+		return `${this.DATABASE_URL}reviews/`;
+	}
+
 
 	static get database() {
 		// If the browser doesn't support service worker,
@@ -29,7 +40,11 @@ class DBHelper {
 	 * Fetch all restaurants.
 	 */
 	static fetchRestaurants(callback) {
-		fetch(DBHelper.DATABASE_URL)
+		DBHelper.getRestaurantDataFromIndexedDB().then(data => {
+			callback(null, data);
+		});
+
+		fetch(DBHelper.RESTAURANT_URL)
 			.then(response => {
 				return response.json();
 			})
@@ -39,10 +54,46 @@ class DBHelper {
 				callback(null, data);
 			})
 			.catch(error => {
-				DBHelper.getRestaurantDataFromIndexedDB().then(data => {
-					callback(null, data);
-				});
+				callback(error, null);
 			});
+	}
+
+	static fetchRestaurantById(id, callback) {
+		const reviewURL = `${this.REVIEW_URL}?restaurant_id=${id}`;
+		const DBOpenRequest = DBHelper.database;
+		DBHelper.upgadeIndexedDB(DBOpenRequest);
+		if (DBOpenRequest) {
+			DBOpenRequest.onsuccess = (event) => {
+				const db = DBOpenRequest.result;
+				const store = db.transaction(['rreviews'], 'readwrite').objectStore('rreviews');
+				const index = store.index('id');
+
+				index.openCursor().onsuccess = (event) => {
+					const cursor = event.target.result;
+					if (cursor) {
+						if (cursor.value.id == id) {
+							const restaurant = cursor.value;
+							fetch(reviewURL)
+								.then(response => {
+									return response.json();
+								})
+								.then(data => {
+									//Got the data, now writting it in the database.
+									restaurant.reviews = data;
+									db.transaction(['rreviews'], 'readwrite').objectStore('rreviews').put(restaurant);
+									callback(null, restaurant);
+								})
+								.catch(error => {
+									callback(null, restaurant);
+								});
+						} else {
+							cursor.continue();
+						}
+					}
+				};
+
+			};
+		}
 	}
 
 	static storeRestaurantDataInIndexedDB(data) {
@@ -78,7 +129,7 @@ class DBHelper {
 						if (cursor.value.id == id) {
 							cursor.value.is_favorite = state;
 							cursor.update(cursor.value);
-							fetch(`${this.DATABASE_URL}/${id}/?is_favorite=${state}`, {
+							fetch(`${this.RESTAURANT_URL}/${id}/?is_favorite=${state}`, {
 								method: 'PUT'
 							});
 						} else {
@@ -132,7 +183,7 @@ class DBHelper {
 	/**
 	 * Fetch a restaurant by its ID.
 	 */
-	static fetchRestaurantById(id, callback) {
+	/*static fetchRestaurantById(id, callback) {
 		// fetch all restaurants with proper error handling.
 		DBHelper.fetchRestaurants((error, restaurants) => {
 			if (error) {
@@ -146,7 +197,7 @@ class DBHelper {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Fetch restaurants by a cuisine type with proper error handling.
