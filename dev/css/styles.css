@@ -326,6 +326,9 @@ input:focus ~ label, input:valid ~ label {
   font-size: 0.75em;
   color: #FF9800; }
 
+.comment-group {
+  padding: 0 1em 0 0; }
+
 @media screen and (min-width: 400px) {
   body {
     font-size: 20px; }

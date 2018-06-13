@@ -736,6 +736,23 @@ function fillRestaurantHoursHTML (operatingHours = self.restaurant.operating_hou
 }
 
 /**
+ * submitReview - submits a review to the database
+ *
+ */
+function submitReview(e) {
+	if (!e)
+		e = window.event;
+	const sender = e.srcElement || e.target;
+	const id = sender.getAttribute('restaurant-id');
+	const name = document.getElementById('review-name').value;
+	const review = document.getElementById('review-text').value;
+	const rating = document.getElementById('review-rating').value;
+	if(name && review){
+		console.log('KEK');
+	}
+}
+
+/**
  * Create all reviews HTML and add them to the webpage.
  */
 function fillReviewsHTML(reviews = self.restaurant.reviews, id = self.restaurant.id) {
@@ -748,6 +765,7 @@ function fillReviewsHTML(reviews = self.restaurant.reviews, id = self.restaurant
 	}
 	const button = document.getElementById('add-comment');
 	button.setAttribute('restaurant-id', id);
+	button.addEventListener('click', submitReview, false);
 	const ul = document.getElementById('reviews-list');
 	reviews.forEach(review => {
 		ul.appendChild(createReviewHTML(review));

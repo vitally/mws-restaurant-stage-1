@@ -377,6 +377,10 @@ input:focus ~ label, input:valid ~ label 		{
   color:#FF9800;
 }
 
+.comment-group{
+  padding: 0 1em 0 0;
+}
+
 //EOF Material input
 
 @media screen and (min-width: 400px) {
