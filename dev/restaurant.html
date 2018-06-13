@@ -48,6 +48,23 @@
       <div id="map" role="application"></div>
     </section>
     <section id="reviews-container" class="reviews-details container">
+      <h3>Reviews</h3>
+      <div class="comment-group">
+        <div class="group">      
+            <input id="comment-name" type="text" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label aria-label="Your name for the review.">Your Name</label>
+        </div>
+        <div class="group">      
+            <input id="comment-text" type="text" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label aria-label="Your review text.">Your Review</label>
+        </div>
+      </div>
+      <a id="add-comment" class="tap-target restaurant-card-details" role="button" aria-label="Add a comment.">Add Comment</a>
+
       <ul id="reviews-list" class="reviews-list"></ul>
     </section>
   </main>
