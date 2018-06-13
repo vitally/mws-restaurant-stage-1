@@ -199,7 +199,6 @@ function createRestaurantHTML(restaurant) {
 	let picUrlSmall = DBHelper.imageUrlForRestaurant(restaurant).concat('-small.jpg');
 	let picUrlMedium = picUrlSmall.replace('small', 'medium');
 	srcSmall.srcset = picUrlSmall + ' 1x, ' + picUrlMedium + ' 2x';
-	srcSmall.media = '(min-width: 500px)';
 	picture.appendChild(srcSmall);
 
 	//next block prepares source tag for large images
