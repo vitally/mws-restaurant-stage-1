@@ -1,5 +1,6 @@
 /*eslint no-unused-vars: 0*/
 /*eslint no-undef: 0*/
+/*eslint no-console: 0*/
 /*eslint linebreak-style: ["error", "windows"]*/
 /**
  * Common database helper functions.
@@ -49,13 +50,43 @@ class DBHelper {
 		const DBOpenRequest = DBHelper.database;
 		DBHelper.upgadeIndexedDB(DBOpenRequest);
 		if (DBOpenRequest) {
-			DBOpenRequest.onsuccess = function (event) {
+			DBOpenRequest.onsuccess = event => {
 				const db = DBOpenRequest.result;
 				const tx = db.transaction('rreviews', 'readwrite');
 				const store = tx.objectStore('rreviews');
 				data.forEach((restaurant) => {
 					store.put(restaurant);
 				});
+			};
+		}
+	}
+
+	static setRestaurantFavorite(id, state) {
+		//Got the data, now writting it in the database.
+		//We could have just used response from PUT
+		//method, but in case we're offline let's update the db first
+		const DBOpenRequest = DBHelper.database;
+		DBHelper.upgadeIndexedDB(DBOpenRequest);
+		if (DBOpenRequest) {
+			DBOpenRequest.onsuccess = (event) => {
+				const db = DBOpenRequest.result;
+				const index = db.transaction(['rreviews'], 'readwrite').objectStore('rreviews').index('id');
+
+				index.openCursor().onsuccess = (event) => {
+					const cursor = event.target.result;
+					if (cursor) {
+						if (cursor.value.id == id) {
+							cursor.value.is_favorite = state;
+							cursor.update(cursor.value);
+							fetch(`${this.DATABASE_URL}/${id}/?is_favorite=${state}`, {
+								method: 'PUT'
+							});
+						} else {
+							cursor.continue();
+						}
+					}
+				};
+
 			};
 		}
 	}
@@ -67,16 +98,16 @@ class DBHelper {
 			const DBOpenRequest = DBHelper.database;
 			DBHelper.upgadeIndexedDB(DBOpenRequest);
 			if (DBOpenRequest) {
-				DBOpenRequest.onsuccess = function (event) {
+				DBOpenRequest.onsuccess = event => {
 					const db = DBOpenRequest.result;
 					const store = db.transaction('rreviews', 'readonly').objectStore('rreviews');
 					const data = [];
-					store.openCursor().onsuccess = function (event) {
+					store.openCursor().onsuccess = event => {
 						const cursor = event.target.result;
-						if(cursor) {
+						if (cursor) {
 							data.push(cursor.value);
 							cursor.continue();
-						}else{
+						} else {
 							resolve(data);
 						}
 					};
@@ -92,6 +123,9 @@ class DBHelper {
 				keyPath: 'id'
 			});
 			store.createIndex('name', 'name');
+			store.createIndex('id', 'id', {
+				unique: true
+			});
 		};
 	}
 

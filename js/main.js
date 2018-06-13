@@ -184,6 +184,9 @@ function fillRestaurantsHTML(restaurants = this.restaurants) {
  * Create restaurant HTML.
  */
 function createRestaurantHTML(restaurant) {
+	if (typeof restaurant.is_favorite === 'undefined') {
+		restaurant.is_favorite = false;
+	}
 	const li = document.createElement('li');
 	li.className = 'restaurant-card';
 
@@ -225,14 +228,19 @@ function createRestaurantHTML(restaurant) {
 	infoContainer.appendChild(name);
 	
 	const favorite_icon = document.createElement('a');
-	const fav_icon_aria_label = restaurant.is_favorite ? 'Remove restaurant ' + restaurant.name + 'from favorites.' : 'Add restaurant ' + restaurant.name + 'to favorites.';
+	const fav_icon_aria_label = JSON.parse(restaurant.is_favorite) ? 'Remove restaurant ' + restaurant.name + 'from favorites.' : 'Add restaurant ' + restaurant.name + 'to favorites.';
 	favorite_icon.className = 'tap-target top-right';
 	favorite_icon.setAttribute('aria-label', fav_icon_aria_label);
+	favorite_icon.setAttribute('role', 'button');
+	favorite_icon.setAttribute('tabindex', '0');
+	favorite_icon.setAttribute('data-restid', restaurant.id);
+	favorite_icon.setAttribute('is-favorite', restaurant.is_favorite);
+	favorite_icon.addEventListener('click', toggleFavorite, false);
 	infoContainer.appendChild(favorite_icon);
 
 	const favorite_symbol = document.createElement('i');
 	favorite_symbol.className = 'material-icons favorite-icon';
-	favorite_symbol.innerHTML = restaurant.is_favorite ? 'favorite' :'favorite_border';
+	favorite_symbol.innerHTML = JSON.parse(restaurant.is_favorite) ? 'favorite' :'favorite_border';
 	favorite_icon.appendChild(favorite_symbol);
 	
 	const addressContainer = document.createElement('div');
@@ -275,4 +283,27 @@ function addMarkersToMap(restaurants = this.restaurants) {
 		});
 		this.markers.push(marker);
 	});
+}
+
+
+function toggleFavorite(e) {
+	if (!e)
+		e = window.event;
+	const sender = e.srcElement || e.target;
+	const id = this.dataset.restid;
+	//Inverting value in te next line
+	let state = JSON.parse(this.getAttribute('is-favorite')) ? false : true;
+	
+	if(id){
+		this.setAttribute('is-favorite',state);
+		DBHelper.setRestaurantFavorite(id, state);
+		if(sender == this){
+			if(this.childNodes.length > 0){
+				this.childNodes[0].innerHTML = state ? 'favorite' :'favorite_border';
+			}
+		}else{
+			sender.innerHTML = state ? 'favorite' :'favorite_border';
+
+		}
+	}
 }

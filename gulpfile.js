@@ -12,11 +12,11 @@ const imageminPngquant = require('imagemin-pngquant');
 
 gulp.task('default', ['copy-html', 'copy-manifest', 'copy-images', 'styles', 'copy-fonts', 'service-worker', 'scripts-dist']);
 
-gulp.task('dev', ['copy-html', 'copy-manifest', 'copy-images', 'styles', 'copy-fonts' , 'service-worker', 'scripts'], () => {
-	gulp.watch('sass/**/*.scss', ['styles']);
-	gulp.watch('js/**/*.js', ['scripts', 'lint']);
-	gulp.watch('sw.js', ['service-worker']);
-	gulp.watch('./*.html', ['copy-html']);
+gulp.task('dev', ['copy-html-dev', 'copy-manifest-dev', 'copy-images-dev', 'styles-dev', 'copy-fonts-dev' , 'service-worker-dev', 'scripts'], () => {
+	gulp.watch('sass/**/*.scss', ['styles-dev']);
+	gulp.watch('js/**/*.js', ['scripts']);
+	gulp.watch('sw.js', ['service-worker-dev']);
+	gulp.watch('./*.html', ['copy-html-dev']);
 });
 
 gulp.task('scripts', () => {
@@ -24,7 +24,7 @@ gulp.task('scripts', () => {
 		.pipe(concat('all.js', {
 			newLine: '\r\n'
 		}))
-		.pipe(gulp.dest('dist/js'));
+		.pipe(gulp.dest('dev/js'));
 });
 
 gulp.task('service-worker', () => {
@@ -36,6 +36,12 @@ gulp.task('service-worker', () => {
 		.pipe(sourcemaps.write())
 		//.pipe(gzip())
 		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('service-worker-dev', () => {
+	gulp.src('sw.js')
+		.pipe(eslint())
+		.pipe(gulp.dest('dev'));
 });
 
 gulp.task('scripts-dist', () => {
@@ -79,9 +85,25 @@ gulp.task('styles', () => {
 	//.pipe(browserSync.stream());
 });
 
+gulp.task('styles-dev', () => {
+	gulp.src('sass/**/*.scss')
+		.pipe(sass().on('error', sass.logError))
+		.pipe(autoprefixer({
+			browsers: ['last 2 versions'],
+			cascade: false
+		}))
+		.pipe(gulp.dest('dev/css'));
+	//.pipe(browserSync.stream());
+});
+
 gulp.task('copy-html', () => {
 	gulp.src('./*.html')
 		.pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy-html-dev', () => {
+	gulp.src('./*.html')
+		.pipe(gulp.dest('./dev'));
 });
 
 gulp.task('copy-fonts', () => {
@@ -89,9 +111,19 @@ gulp.task('copy-fonts', () => {
 		.pipe(gulp.dest('dist/fonts'));
 });
 
+gulp.task('copy-fonts-dev', () => {
+	gulp.src('fonts/*')
+		.pipe(gulp.dest('dev/fonts'));
+});
+
 gulp.task('copy-manifest', () => {
 	gulp.src('./manifest.json')
 		.pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy-manifest-dev', () => {
+	gulp.src('./manifest.json')
+		.pipe(gulp.dest('./dev'));
 });
 
 gulp.task('copy-images', () => {
@@ -101,6 +133,15 @@ gulp.task('copy-images', () => {
 			use: [imageminPngquant()]
 		}))
 		.pipe(gulp.dest('dist/img'));
+});
+
+gulp.task('copy-images-dev', () => {
+	gulp.src('img/**/*')
+		.pipe(imagemin({
+			progressive: true,
+			use: [imageminPngquant()]
+		}))
+		.pipe(gulp.dest('dev/img'));
 });
 
 gulp.task('unitTests', () => {

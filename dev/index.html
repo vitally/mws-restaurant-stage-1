@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#263238"/>
+  <link rel="manifest" href="/manifest.json">
+  <title>Restaurant Reviews</title>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1><a class="tap-target" href="/">Restaurant Reviews</a></h1>
+    </nav>
+  </header>
+
+  <main id="maincontent" class="main-content" role="main">
+    <div id="map-label" role="tooltip" hidden>Restaurant map.</div>
+    <section id="map-container" class="map-container container">
+      <div id="map" role="application" aria-describedby="map-label"></div>
+    </section>
+    <section class="container" aria-label="Restaurant filtering and list.">
+      <div class="filter-options" role="form" aria-label="Filter Results">
+        <h2>Filter Results</h2>
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" class="neighborhoods-select" aria-label="Select restaurant neighborhood.">
+          <option value="all">All Neighborhoods</option>
+        </select>
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" class="cuisines-select" aria-label="Select restaurant cuisine.">
+          <option value="all">All Cuisines</option>
+        </select>
+        <div id="restaurant-help" role="tooltip" hidden>Filtered restaurant list.</div>
+        <div role="tooltip" id="restaurant-neighborhood-label" hidden>Restaurant neighborhood.</div>
+        <div role="tooltip" id="restaurant-address-label" hidden>Restaurant address.</div>
+        <ul id="restaurants-list" class="restaurants-list" aria-describedby="restaurant-help"></ul>
+      </div>
+    </section>
+  </main>
+  
+  <footer id="footer">
+    Copyright (c) 2017 <a class="tap-target" href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+  </footer>
+
+  <script async defer type="application/javascript" charset="utf-8" src="js/all.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZOJtKVTyEcz-RVVr4aePsebEPAP9JYaw&libraries=places&callback=initMap"></script>
+  <link rel="stylesheet" href="css/styles.css" >
+
+</body>
+
+</html>
