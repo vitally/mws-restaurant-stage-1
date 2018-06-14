@@ -118,10 +118,19 @@ function submitReview(e) {
 	const sender = e.srcElement || e.target;
 	const id = sender.getAttribute('restaurant-id');
 	const name = document.getElementById('review-name').value;
-	const review = document.getElementById('review-text').value;
+	const comment = document.getElementById('review-text').value;
 	const rating = document.getElementById('review-rating').value;
-	if(name && review){
-		console.log('KEK');
+	if(name && comment){
+		const data = {
+			'restaurant_id': id,
+			'name': name,
+			'rating': rating,
+			'comments': comment,
+			'createdAt': (new Date()).getTime()
+		};
+		const ul = document.getElementById('reviews-list');
+		ul.appendChild(createReviewHTML(data));
+		const review = DBHelper.addRestaurantReview(data);
 	}
 }
 

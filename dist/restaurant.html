@@ -28,7 +28,7 @@
       <div class="restaurant-info-container">
         <h2 id="restaurant-name" class=""></h2>
         <picture id="restaurant-picture">
-          <source id="source-small" media="(min-width: 500px)">
+          <source id="source-small">
           <source id="source-large" media="(min-width: 750px)">
           <img id="restaurant-img">
         </picture>
@@ -48,6 +48,29 @@
       <div id="map" role="application"></div>
     </section>
     <section id="reviews-container" class="reviews-details container">
+      <h3>Reviews</h3>
+      <div class="comment-group">
+        <div class="group">      
+            <input id="review-name" type="text" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label aria-label="Your name for the review.">Your Name</label>
+        </div>
+        <div class="group">      
+            <input id="review-rating" type="number" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label aria-label="Your rating for the restaurant.">Your Rating</label>
+        </div>
+        <div class="group">      
+            <input id="review-text" type="text" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label aria-label="Your review text.">Your Review</label>
+        </div>
+      </div>
+      <a id="add-comment" class="tap-target restaurant-card-details" role="button" aria-label="Add a comment.">Add Comment</a>
+
       <ul id="reviews-list" class="reviews-list"></ul>
     </section>
   </main>

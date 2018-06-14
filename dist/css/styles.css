@@ -295,9 +295,45 @@ a.restaurant-card-details:focus {
   top: 1.5em;
   right: 0; }
 
+.group {
+  position: relative;
+  margin-bottom: 1.5em; }
+
+input {
+  padding: 10px 10px 10px 5px;
+  display: block;
+  border: none;
+  border-bottom: 1px solid #757575;
+  width: 100%; }
+
+input:focus {
+  outline: none; }
+
+label {
+  color: #999;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all; }
+
+/* active state */
+input:focus ~ label, input:valid ~ label {
+  top: -20px;
+  font-size: 0.75em;
+  color: #FF9800; }
+
+.comment-group {
+  padding: 0 1em 0 0; }
+
 @media screen and (min-width: 400px) {
   body {
     font-size: 20px; }
+  input {
+    width: 100%; }
   .filter-options {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -312,11 +348,13 @@ a.restaurant-card-details:focus {
 @media screen and (min-width: 650px) and (max-width: 849px) {
   body {
     font-size: 22px; }
+  input {
+    width: 50%; }
   .restaurant-card {
     width: calc((100% - 10px)/2);
     margin-right: 10px;
     font-size: 0.8em; }
-  .restaurant-card:nth-child(2n + 0) {
+  .restaurant-card:nth-child(2n+0) {
     margin-right: 0; }
   .restaurant-card .address-container {
     font-size: 0.8em; } }
@@ -333,7 +371,7 @@ a.restaurant-card-details:focus {
     margin-right: 10px;
     width: calc((100% - 20px)/3);
     font-size: 0.8em; }
-  .restaurant-card:nth-child(3n + 0) {
+  .restaurant-card:nth-child(3n+0) {
     margin-right: 0; }
   .restaurant-card .address-container {
     font-size: 0.7em; } }

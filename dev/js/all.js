@@ -122,15 +122,25 @@ class DBHelper {
 			DBOpenRequest.onsuccess = (event) => {
 				const db = DBOpenRequest.result;
 				const index = db.transaction(['rreviews'], 'readwrite').objectStore('rreviews').index('id');
-
+				const url = `${this.RESTAURANT_URL}${id}/?is_favorite=${state}`;
 				index.openCursor().onsuccess = (event) => {
 					const cursor = event.target.result;
 					if (cursor) {
 						if (cursor.value.id == id) {
 							cursor.value.is_favorite = state;
 							cursor.update(cursor.value);
-							fetch(`${this.RESTAURANT_URL}/${id}/?is_favorite=${state}`, {
+							const req = new Request(url, {
 								method: 'PUT'
+							});
+							fetch(req).catch(e => {
+								if(!navigator.onLine){
+									this.addRequestToQueue({
+										'url': url, 
+										'options': {
+											method: 'PUT'
+										}
+									});
+								}
 							});
 						} else {
 							cursor.continue();
@@ -140,6 +150,40 @@ class DBHelper {
 
 			};
 		}
+	}
+
+	static addRestaurantReview(data) {
+		const req = new Request(this.REVIEW_URL, {
+			body: JSON.stringify(data),
+			method: 'POST'
+		});
+		fetch(req).then(response => {
+			return response.json();
+		}).then(review => {
+			//do a refresh
+			this.fetchRestaurantById(data.restaurant_id, {});
+		}).catch(e => {
+			if(!navigator.onLine){
+				this.addRequestToQueue({
+					url: this.REVIEW_URL, 
+					options: {
+						body: JSON.stringify(data),
+						method: 'POST'
+					}
+				});
+			}
+			this.fetchRestaurantById(data.restaurant_id, (err, rst) => {
+				rst.reviews.push(data);
+				const DBOpenRequest = DBHelper.database;
+				DBHelper.upgadeIndexedDB(DBOpenRequest);
+				if (DBOpenRequest) {
+					DBOpenRequest.onsuccess = (event) => {
+						const db = DBOpenRequest.result;
+						db.transaction(['rreviews'], 'readwrite').objectStore('rreviews').put(rst);
+					};
+				}
+			});
+		});
 	}
 
 	static getRestaurantDataFromIndexedDB() {
@@ -177,27 +221,9 @@ class DBHelper {
 			store.createIndex('id', 'id', {
 				unique: true
 			});
+			db.createObjectStore('requestqueue',  { autoIncrement : true });
 		};
 	}
-
-	/**
-	 * Fetch a restaurant by its ID.
-	 */
-	/*static fetchRestaurantById(id, callback) {
-		// fetch all restaurants with proper error handling.
-		DBHelper.fetchRestaurants((error, restaurants) => {
-			if (error) {
-				callback(error, null);
-			} else {
-				const restaurant = restaurants.find(r => r.id == id);
-				if (restaurant) { // Got the restaurant
-					callback(null, restaurant);
-				} else { // Restaurant does not exist in the database
-					callback('Restaurant does not exist', null);
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Fetch restaurants by a cuisine type with proper error handling.
@@ -316,6 +342,35 @@ class DBHelper {
 		return marker;
 	}
 
+	static addRequestToQueue(request){
+		const DBOpenRequest = DBHelper.database;
+		DBHelper.upgadeIndexedDB(DBOpenRequest);
+		if (DBOpenRequest) {
+			DBOpenRequest.onsuccess = event => {
+				const db = DBOpenRequest.result;
+				db.transaction('requestqueue', 'readwrite').objectStore('requestqueue').put(request);
+			};
+		}
+	}
+	static sendQueuedRequests() {
+		const DBOpenRequest = DBHelper.database;
+		DBHelper.upgadeIndexedDB(DBOpenRequest);
+		if (DBOpenRequest) {
+			DBOpenRequest.onsuccess = event => {
+				const db = DBOpenRequest.result;
+				const store = db.transaction('requestqueue', 'readwrite').objectStore('requestqueue');
+				store.openCursor().onsuccess = event => {
+					const cursor = event.target.result;
+					if (cursor) {
+						const request = new Request(cursor.value.url, cursor.value.options);
+						fetch(request);
+						cursor.delete();
+						cursor.continue();
+					}
+				};
+			};
+		}
+	}
 }
 /*eslint no-console: 0*/
 /*eslint no-unused-vars: 0*/
@@ -745,10 +800,19 @@ function submitReview(e) {
 	const sender = e.srcElement || e.target;
 	const id = sender.getAttribute('restaurant-id');
 	const name = document.getElementById('review-name').value;
-	const review = document.getElementById('review-text').value;
+	const comment = document.getElementById('review-text').value;
 	const rating = document.getElementById('review-rating').value;
-	if(name && review){
-		console.log('KEK');
+	if(name && comment){
+		const data = {
+			'restaurant_id': id,
+			'name': name,
+			'rating': rating,
+			'comments': comment,
+			'createdAt': (new Date()).getTime()
+		};
+		const ul = document.getElementById('reviews-list');
+		ul.appendChild(createReviewHTML(data));
+		const review = DBHelper.addRestaurantReview(data);
 	}
 }
 
@@ -826,13 +890,16 @@ function getParameterByName(name, url){
 }
 
 /*eslint no-console: 0*/
+/*eslint no-undef: 0*/
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
 		navigator.serviceWorker.register('sw.js').then(() => {
 			console.log('Service Worker Registerd');
 		}).catch((e) => {
-			console.error(e);
-			
+			console.error(e);	
 		});
 	});
 }
+
+
+window.addEventListener('online', DBHelper.sendQueuedRequests, false);
