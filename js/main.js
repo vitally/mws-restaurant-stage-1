@@ -113,11 +113,13 @@ window.initMap = () => {
 		lat: 40.722216,
 		lng: -73.987501
 	};
-	this.map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 12,
-		center: loc,
-		scrollwheel: false
-	});
+	if(typeof (google) !== 'undefined'){
+		this.map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 12,
+			center: loc,
+			scrollwheel: false
+		});
+	}
 	updateRestaurants();
 };
 
@@ -177,7 +179,9 @@ function fillRestaurantsHTML(restaurants = this.restaurants) {
 		ul.appendChild(createRestaurantHTML(restaurant));
 	});
 	//startObserver();
-	addMarkersToMap();
+	if (typeof google !== 'undefined') {
+		addMarkersToMap();
+	}
 }
 
 /**
