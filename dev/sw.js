@@ -81,7 +81,7 @@ function serveCache(request) {
  * @description here we make sure we respond buy calling the cashe loopup first
  */
 self.addEventListener('fetch', (event) => {
-	if(event.request.url.startsWith('http://localhost')){
+	if(event.request.url.startsWith('http://localhost:8080')){
 		event.respondWith(serveCache(event.request));
 	}else{
 		event.respondWith(fetch(event.request));
