@@ -16,12 +16,10 @@ class DBHelper {
 	}
 
 	static get RESTAURANT_URL() {
-		const port = 1337; // Change this to your server port
 		return `${this.DATABASE_URL}restaurants/`;
 	}
 
 	static get REVIEW_URL() {
-		const port = 1337; // Change this to your server port
 		return `${this.DATABASE_URL}reviews/`;
 	}
 
@@ -40,10 +38,6 @@ class DBHelper {
 	 * Fetch all restaurants.
 	 */
 	static fetchRestaurants(callback) {
-		DBHelper.getRestaurantDataFromIndexedDB().then(data => {
-			callback(null, data);
-		});
-
 		fetch(DBHelper.RESTAURANT_URL)
 			.then(response => {
 				return response.json();
@@ -54,7 +48,9 @@ class DBHelper {
 				callback(null, data);
 			})
 			.catch(error => {
-				callback(error, null);
+				DBHelper.getRestaurantDataFromIndexedDB().then(data => {
+					callback(null, data);
+				});
 			});
 	}
 
@@ -133,9 +129,9 @@ class DBHelper {
 								method: 'PUT'
 							});
 							fetch(req).catch(e => {
-								if(!navigator.onLine){
+								if (!navigator.onLine) {
 									this.addRequestToQueue({
-										'url': url, 
+										'url': url,
 										'options': {
 											method: 'PUT'
 										}
@@ -163,9 +159,9 @@ class DBHelper {
 			//do a refresh
 			this.fetchRestaurantById(data.restaurant_id, {});
 		}).catch(e => {
-			if(!navigator.onLine){
+			if (!navigator.onLine) {
 				this.addRequestToQueue({
-					url: this.REVIEW_URL, 
+					url: this.REVIEW_URL,
 					options: {
 						body: JSON.stringify(data),
 						method: 'POST'
@@ -221,7 +217,9 @@ class DBHelper {
 			store.createIndex('id', 'id', {
 				unique: true
 			});
-			db.createObjectStore('requestqueue',  { autoIncrement : true });
+			db.createObjectStore('requestqueue', {
+				autoIncrement: true
+			});
 		};
 	}
 
@@ -342,7 +340,7 @@ class DBHelper {
 		return marker;
 	}
 
-	static addRequestToQueue(request){
+	static addRequestToQueue(request) {
 		const DBOpenRequest = DBHelper.database;
 		DBHelper.upgadeIndexedDB(DBOpenRequest);
 		if (DBOpenRequest) {

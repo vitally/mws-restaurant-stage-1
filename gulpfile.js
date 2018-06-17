@@ -17,6 +17,7 @@ gulp.task('dev', ['copy-html-dev', 'copy-manifest-dev', 'copy-images-dev', 'styl
 	gulp.watch('js/**/*.js', ['scripts']);
 	gulp.watch('sw.js', ['service-worker-dev']);
 	gulp.watch('./*.html', ['copy-html-dev']);
+	gulp.watch('./manifest.json', ['copy-manifest-dev']);
 });
 
 gulp.task('scripts', () => {

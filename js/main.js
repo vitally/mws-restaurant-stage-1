@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 let map;
 
-const observer = new IntersectionObserver(onIntersection, {
+/*const observer = new IntersectionObserver(onIntersection, {
 	rootMargin: '0px',
 	threshold: 0.1
 });
@@ -45,7 +45,7 @@ function fetchImage(url) {
 	});
 }
 
-
+*/
 
 /**
  * Fetch all neighborhoods and set their HTML.
@@ -160,13 +160,13 @@ function resetRestaurants(restaurants) {
 	this.markers = [];
 	this.restaurants = restaurants;
 }
-
+/*
 function startObserver() {
 	const images = document.querySelectorAll('.restaurant-img');
 	images.forEach(image => {
 		observer.observe(image);
 	});
-}
+}*/
 
 /**
  * Create all restaurants HTML and add them to the webpage.
@@ -176,7 +176,7 @@ function fillRestaurantsHTML(restaurants = this.restaurants) {
 	restaurants.forEach(restaurant => {
 		ul.appendChild(createRestaurantHTML(restaurant));
 	});
-	startObserver();
+	//startObserver();
 	addMarkersToMap();
 }
 
@@ -195,23 +195,25 @@ function createRestaurantHTML(restaurant) {
 
 	//next block prepares source tag for small images
 	const srcSmall = document.createElement('source');
-	srcSmall.className = 'source-small';
+	srcSmall.className = 'lazyload source-small';
 	let picUrlSmall = DBHelper.imageUrlForRestaurant(restaurant).concat('-small.jpg');
 	let picUrlMedium = picUrlSmall.replace('small', 'medium');
-	srcSmall.srcset = picUrlSmall + ' 1x, ' + picUrlMedium + ' 2x';
+	//srcSmall.srcset = picUrlSmall + ' 1x, ' + picUrlMedium + ' 2x';
+	srcSmall.setAttribute('data-srcset',picUrlSmall + ' 1x, ' + picUrlMedium + ' 2x');
 	picture.appendChild(srcSmall);
 
 	//next block prepares source tag for large images
 	const srcLarge = document.createElement('source');
-	srcLarge.className = 'source-large';
+	srcLarge.className = 'lazyload source-large';
 	let picUrlLarge = picUrlSmall.replace('small', 'large');
-	srcLarge.srcset = picUrlMedium + ' 1x, ' + picUrlLarge + ' 2x';
+	//srcLarge.srcset = picUrlMedium + ' 1x, ' + picUrlLarge + ' 2x';
+	srcLarge.setAttribute('data-srcset', picUrlMedium + ' 1x, ' + picUrlLarge + ' 2x');
 	srcLarge.media = '(min-width: 750px)';
 	picture.appendChild(srcLarge);
 
 	//creating img tag, and adding alt
 	const image = document.createElement('img');
-	image.className = 'restaurant-img';
+	image.className = 'lazyload restaurant-img';
 	image.alt = 'Image of "' + restaurant.name + '" restaurant.';
 	//image.src = picUrlSmall;
 	image.setAttribute('data-src', picUrlSmall);

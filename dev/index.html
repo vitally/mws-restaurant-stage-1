@@ -8,6 +8,22 @@
   <meta name="theme-color" content="#263238"/>
   <link rel="manifest" href="/manifest.json">
   <title>Restaurant Reviews</title>
+  <style>
+      #map-container {
+        position: relative;
+        min-height: 300px;
+        height: 30vh;
+      }
+  
+      #map {
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+    </style>
 </head>
 
 <body>
@@ -45,7 +61,7 @@
 
   <script async defer type="application/javascript" charset="utf-8" src="js/all.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZOJtKVTyEcz-RVVr4aePsebEPAP9JYaw&libraries=places&callback=initMap"></script>
-  <link rel="stylesheet" href="css/styles.css" >
+  <link id="styles" rel="stylesheet" href="css/styles.css" disabled>
 
 </body>
 

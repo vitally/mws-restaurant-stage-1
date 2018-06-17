@@ -5,6 +5,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
+  font-display: swap;
   src: url('../fonts/MaterialIcons-Regular.eot');
   /* For IE6-8 */
   src: local('Material Icons'), local('MaterialIcons-Regular'), url('../fonts/MaterialIcons-Regular.woff2') format('woff2'), url('../fonts/MaterialIcons-Regular.woff') format('woff'), url('../fonts/MaterialIcons-Regular.ttf') format('truetype');
@@ -16,6 +17,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
+  font-display: swap;
   src: url('../fonts/roboto-v18-latin-regular.eot');
   /* IE9 Compat Modes */
   src: local('Roboto'), local('Roboto-Regular'), url('../fonts/roboto-v18-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */

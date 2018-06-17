@@ -5,8 +5,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#263238"/>
+  <meta name="theme-color" content="#263238" />
   <title>Restaurant Info</title>
+  <style>
+    #map-container {
+      position: relative;
+      min-height: 300px;
+      height: 30vh;
+    }
+
+    #map {
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
 </head>
 
 <body class="inside">
@@ -40,7 +56,7 @@
         </div>
       </div>
       <table id="restaurant-hours" class="restaurant-hours">
-          <caption>Working Hours</caption>
+        <caption>Working Hours</caption>
       </table>
     </section>
     <div id="map-label" role="tooltip" hidden>Restaurant map.</div>
@@ -50,23 +66,23 @@
     <section id="reviews-container" class="reviews-details container">
       <h3>Reviews</h3>
       <div class="comment-group">
-        <div class="group">      
-            <input id="review-name" type="text" required>
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label aria-label="Your name for the review.">Your Name</label>
+        <div class="group">
+          <input id="review-name" type="text" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label aria-label="Your name for the review.">Your Name</label>
         </div>
-        <div class="group">      
-            <input id="review-rating" type="number" required>
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label aria-label="Your rating for the restaurant.">Your Rating</label>
+        <div class="group">
+          <input id="review-rating" type="number" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label aria-label="Your rating for the restaurant.">Your Rating</label>
         </div>
-        <div class="group">      
-            <input id="review-text" type="text" required>
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label aria-label="Your review text.">Your Review</label>
+        <div class="group">
+          <input id="review-text" type="text" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label aria-label="Your review text.">Your Review</label>
         </div>
       </div>
       <a id="add-comment" class="tap-target restaurant-card-details" role="button" aria-label="Add a comment.">Add Comment</a>
@@ -84,7 +100,7 @@
 
   <script async defer type="application/javascript" charset="utf-8" src="js/all.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZOJtKVTyEcz-RVVr4aePsebEPAP9JYaw&libraries=places&callback=initMapDetails"></script>
-  <link rel="stylesheet" href="css/styles.css" type="text/css" >
+  <link id="styles" rel="stylesheet" href="css/styles.css" disabled>
 </body>
 
 </html>

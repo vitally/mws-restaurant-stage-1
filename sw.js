@@ -1,5 +1,7 @@
 /*eslint no-console: 0*/
 /*eslint no-debugger: 0*/
+/*eslint no-undef: 0*/
+
 const staticCacheName = 'rreviews-static-v1';
 
 const allCaches = [
@@ -45,28 +47,8 @@ self.addEventListener('install', event => {
 				'/img/3-large.jpg',
 				'/img/3-medium.jpg',
 				'/img/3-small.jpg',
-				'/img/4-large.jpg',
-				'/img/4-medium.jpg',
-				'/img/4-small.jpg',
-				'/img/5-large.jpg',
-				'/img/5-medium.jpg',
-				'/img/5-small.jpg',
-				'/img/6-large.jpg',
-				'/img/6-medium.jpg',
-				'/img/6-small.jpg',
-				'/img/7-large.jpg',
-				'/img/7-medium.jpg',
-				'/img/7-small.jpg',
-				'/img/8-large.jpg',
-				'/img/8-medium.jpg',
-				'/img/8-small.jpg',
-				'/img/9-large.jpg',
-				'/img/9-medium.jpg',
-				'/img/9-small.jpg',
-				'/img/10-large.jpg',
-				'/img/10-medium.jpg',
-				'/img/10-small.jpg',
-				'/img/icon.png'
+				'/img/icon.png',
+				'/fonts/roboto-v18-latin-regular.woff2'
 			]);
 		}).catch(e => {
 			console.log(e);
@@ -99,5 +81,10 @@ function serveCache(request) {
  * @description here we make sure we respond buy calling the cashe loopup first
  */
 self.addEventListener('fetch', (event) => {
-	event.respondWith(serveCache(event.request));
+	if(event.request.url.startsWith('http://localhost')){
+		event.respondWith(serveCache(event.request));
+	}else{
+		event.respondWith(fetch(event.request));
+	}
+
 });
