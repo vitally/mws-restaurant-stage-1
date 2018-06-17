@@ -700,13 +700,15 @@ window.initMapDetails = () => {
 		if (error) { // Got an error!
 			console.error(error);
 		} else {
-			self.map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 16,
-				center: restaurant.latlng,
-				scrollwheel: false
-			});
+			if(typeof google !== 'undefined'){
+				self.map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 16,
+					center: restaurant.latlng,
+					scrollwheel: false
+				});
+				DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+			}
 			fillBreadcrumb();
-			DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
 		}
 	});
 };
@@ -906,15 +908,12 @@ if ('serviceWorker' in navigator) {
 			}).catch((e) => {
 				console.error(e);
 			});
-		}
-		if (navigator.onLine === false) {
-			initMap();
+			if (navigator.onLine === false) {
+				initMap();
+			}
 		}else{
-			if (document.querySelectorAll('#map').length > 0) {
-				const js_file = document.createElement('script');
-				js_file.type = 'text/javascript';
-				js_file.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDZOJtKVTyEcz-RVVr4aePsebEPAP9JYaw&libraries=places&callback=initMap';
-				document.getElementsByTagName('head')[0].appendChild(js_file);
+			if (navigator.onLine === false) {
+				initMapDetails();
 			}
 		}
 	});
